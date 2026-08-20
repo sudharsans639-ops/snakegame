@@ -5,7 +5,7 @@ WIDTH = 600
 HEIGHT = 400
 CELL_SIZE = 20
 
-SPEED = 100  # Lower = faster
+SPEED = 100  
 
 window = tk.Tk()
 window.title(" Snake Game")
@@ -24,7 +24,6 @@ canvas = tk.Canvas(
 )
 canvas.pack()
 
-# Score display
 score_label = tk.Label(
     window,
     text="Score: 0",
