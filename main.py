@@ -1,31 +1,21 @@
 import tkinter as tk
 import random
 
-# -----------------------------
-# Game Settings
-# -----------------------------
 WIDTH = 600
 HEIGHT = 400
 CELL_SIZE = 20
 
 SPEED = 100  # Lower = faster
 
-# -----------------------------
-# Create Window
-# -----------------------------
 window = tk.Tk()
 window.title(" Snake Game")
 window.resizable(False, False)
 
-# Score
 score = 0
 game_over = False
 direction = "Right"
 next_direction = "Right"
 
-# -----------------------------
-# Canvas
-# -----------------------------
 canvas = tk.Canvas(
     window,
     width=WIDTH,
@@ -42,18 +32,12 @@ score_label = tk.Label(
 )
 score_label.pack()
 
-# -----------------------------
-# Snake
-# -----------------------------
 snake = [
     [100, 100],
     [80, 100],
     [60, 100]
 ]
 
-# -----------------------------
-# Create Food
-# -----------------------------
 def create_food():
     while True:
         x = random.randrange(0, WIDTH, CELL_SIZE)
@@ -65,9 +49,6 @@ def create_food():
 
 food = create_food()
 
-# -----------------------------
-# Draw Game
-# -----------------------------
 def draw_game():
     canvas.delete("all")
 
@@ -81,10 +62,10 @@ def draw_game():
         fill="red"
     )
 
-    # Draw snake
+
     for i, (x, y) in enumerate(snake):
         if i == 0:
-            # Snake head
+        
             canvas.create_rectangle(
                 x,
                 y,
@@ -94,7 +75,7 @@ def draw_game():
                 outline="white"
             )
         else:
-            # Snake body
+        
             canvas.create_rectangle(
                 x,
                 y,
@@ -105,14 +86,11 @@ def draw_game():
             )
 
 
-# -----------------------------
-# Change Direction
-# -----------------------------
 def change_direction(new_direction):
 
     global next_direction
 
-    # Prevent snake from moving directly backwards
+
     if new_direction == "Up" and direction != "Down":
         next_direction = "Up"
 
@@ -126,10 +104,6 @@ def change_direction(new_direction):
         next_direction = "Right"
 
 
-# -----------------------------
-# Move Snake
-# -----------------------------
-def move_snake():
 
     global direction
     global food
@@ -141,10 +115,9 @@ def move_snake():
 
     direction = next_direction
 
-    # Current head position
+
     head_x, head_y = snake[0]
 
-    # Calculate new head position
     if direction == "Up":
         head_y -= CELL_SIZE
 
@@ -159,9 +132,7 @@ def move_snake():
 
     new_head = [head_x, head_y]
 
-    # -----------------------------
-    # Check Wall Collision
-    # -----------------------------
+
     if (
         head_x < 0
         or head_x >= WIDTH
@@ -171,19 +142,13 @@ def move_snake():
         end_game()
         return
 
-    # -----------------------------
-    # Check Self Collision
-    # -----------------------------
+
     if new_head in snake:
         end_game()
         return
-
-    # Add new head
     snake.insert(0, new_head)
 
-    # -----------------------------
-    # Check Food Collision
-    # -----------------------------
+    
     if new_head == food:
 
         score += 10
@@ -192,19 +157,16 @@ def move_snake():
         food = create_food()
 
     else:
-        # Remove tail
+
         snake.pop()
 
-    # Draw updated game
+
     draw_game()
 
-    # Continue game
+
     window.after(SPEED, move_snake)
 
 
-# -----------------------------
-# Game Over
-# -----------------------------
 def end_game():
 
     global game_over
@@ -236,9 +198,6 @@ def end_game():
     )
 
 
-# -----------------------------
-# Restart Game
-# -----------------------------
 def restart_game(event=None):
 
     global snake
@@ -270,27 +229,20 @@ def restart_game(event=None):
     move_snake()
 
 
-# -----------------------------
-# Keyboard Controls
-# -----------------------------
+
 window.bind("<Up>", lambda event: change_direction("Up"))
 window.bind("<Down>", lambda event: change_direction("Down"))
 window.bind("<Left>", lambda event: change_direction("Left"))
 window.bind("<Right>", lambda event: change_direction("Right"))
 
-# WASD controls
 window.bind("w", lambda event: change_direction("Up"))
 window.bind("s", lambda event: change_direction("Down"))
 window.bind("a", lambda event: change_direction("Left"))
 window.bind("d", lambda event: change_direction("Right"))
 
-# Restart
 window.bind("r", restart_game)
 window.bind("R", restart_game)
 
-# -----------------------------
-# Start Game
-# -----------------------------
 draw_game()
 move_snake()
 
